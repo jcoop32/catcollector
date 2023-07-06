@@ -7,4 +7,5 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     path('cats/', views.cats_list, name='cats'),
     path('cats/<int:cat_id>/', views.cat_details, name='details'),
+    path('cats/create', views.CatCreate.as_view(), name='cat_create')
 ]

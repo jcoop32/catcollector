@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.views.generic.edit import CreateView
 from .models import Cat
 
 # Create your views here.
@@ -18,3 +19,8 @@ def cat_details(request, cat_id):
     return render(request, 'cats/cat_details.html', {
         'cat': Cat.objects.get(id=cat_id)
     })
+
+class CatCreate(CreateView):
+    model = Cat
+    fields = '__all__'
+    

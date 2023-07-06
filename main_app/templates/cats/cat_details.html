@@ -1,7 +1,11 @@
 {% extends 'base.html' %} {% block content %}
 <a href="{% url 'cats' %}">Back</a>
 <h1>{{ cat.name }}</h1>
-<p>{{ cat.breed }}</p>
-<p>{{ cat.description }}</p>
-<p>{{ cat.age }}</p>
+<p>Breed: {{ cat.breed }}</p>
+<p>Description: {{ cat.description }}</p>
+{% if cat.age > 0 %}
+      <p>Age: {{ cat.age }}</p>
+      {% else %}
+      <p>Age: Kitten</p>
+      {% endif %}
 {% endblock %}
