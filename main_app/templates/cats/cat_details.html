@@ -1,11 +1,20 @@
 {% extends 'base.html' %} {% block content %}
 <a href="{% url 'cats' %}">Back</a>
-<h1>{{ cat.name }}</h1>
-<p>Breed: {{ cat.breed }}</p>
-<p>Description: {{ cat.description }}</p>
-{% if cat.age > 0 %}
-      <p>Age: {{ cat.age }}</p>
-      {% else %}
-      <p>Age: Kitten</p>
-      {% endif %}
+<h1>Details</h1>
+<div class="card">
+  <div class="card-content">
+    <h1>{{ cat.name }}</h1>
+    <p>Breed: {{ cat.breed }}</p>
+    <p>Description: {{ cat.description }}</p>
+    {% if cat.age > 0 %}
+    <p>Age: {{ cat.age }}</p>
+    {% else %}
+    <p>Age: Kitten</p>
+    {% endif %}
+    <div class="card-action">
+      <a href="{% url 'cat_update' cat.id %}">Edit</a>
+      <a href="{% url 'cat_delete' cat.id %}">Delete</a>
+    </div>
+  </div>
+</div>
 {% endblock %}

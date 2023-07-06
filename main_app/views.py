@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from .models import Cat
 
 # Create your views here.
@@ -23,4 +23,12 @@ def cat_details(request, cat_id):
 class CatCreate(CreateView):
     model = Cat
     fields = '__all__'
-    
+
+class CatUpdate(UpdateView):
+    model = Cat
+    # selects specific fields from model
+    fields = ['breed', 'description', 'age']
+
+class CatDelete(DeleteView):
+    model = Cat
+    success_url = '/cats'
