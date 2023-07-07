@@ -1,6 +1,6 @@
 from django.db import models
 from django.urls import reverse
-
+from datetime import date
 MEALS = (
     ('B', 'Breakfast'),
     ('L', 'Lunch'),
@@ -17,6 +17,10 @@ class Cat(models.Model):
         return f'{self.name} ({self.id})'
     def get_absolute_url(self):
         return reverse('details', kwargs={'cat_id': self.id})
+    def fed_for_today(self):
+        return self.feeding_set.filter(date=date.today()).count() >= len(MEALS)
+
+
 
 class Feeding(models.Model):
     date = models.DateField('Feeding Date')
@@ -26,3 +30,7 @@ class Feeding(models.Model):
 
     def __str__(self):
         return f'{self.get_meal_display()} on {self.date} for {self.cat.name}'
+    
+    # change default sort
+    class Meta:
+        ordering = ['-date']
