@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from .models import Cat
+from .forms import FeedingForm
 
 # Create your views here.
 
@@ -16,8 +17,11 @@ def cats_list(request):
     }) 
 
 def cat_details(request, cat_id):
+    # instantiate FeedingForm to be rendered in the details.html
+    feeding_form = FeedingForm() 
     return render(request, 'cats/cat_details.html', {
-        'cat': Cat.objects.get(id=cat_id)
+        'cat': Cat.objects.get(id=cat_id),
+        'feeding_form': feeding_form
     })
 
 class CatCreate(CreateView):
