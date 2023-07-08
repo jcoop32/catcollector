@@ -1,4 +1,6 @@
 from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
@@ -13,13 +15,23 @@ def home(request):
 def about(request):
     return render(request, 'about.html') 
 
+# makes sure user is logged in
+@login_required
 def cats_list(request):
     catLen = Cat.objects.filter(user=request.user).count()
     return render(request, 'cats/cats_list.html', {
         'cats': Cat.objects.filter(user=request.user).order_by('id'),
         'catLen': catLen,
+    })
+
+# explore page
+@login_required
+def explore_list(request):
+    return render(request, 'cats/explore_list.html', {
+        'cats': Cat.objects.all(),
     }) 
 
+@login_required
 def cat_details(request, cat_id):
     # instantiate FeedingForm to be rendered in the details.html
     feeding_form = FeedingForm()
@@ -28,22 +40,26 @@ def cat_details(request, cat_id):
         'feeding_form': feeding_form
     })
 
-class CatCreate(CreateView):
+
+class CatCreate(LoginRequiredMixin, CreateView):
     model = Cat
     fields = ['name', 'breed', 'description', 'age']
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
-class CatUpdate(UpdateView):
+
+class CatUpdate(LoginRequiredMixin, UpdateView):
     model = Cat
     # selects specific fields from model
     fields = ['breed', 'description', 'age']
 
-class CatDelete(DeleteView):
+
+class CatDelete(LoginRequiredMixin, DeleteView):
     model = Cat
     success_url = '/cats'
 
+@login_required
 def add_feeding(request, cat_id):
     # creates a ModelForm instance using the data that was  
     # submitted in the form

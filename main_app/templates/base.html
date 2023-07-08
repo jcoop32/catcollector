@@ -25,9 +25,11 @@
           <ul class="right">
             <li><a href="{% url 'about' %}">About</a></li>
             {% if user.is_authenticated %}
+            <li><a href="{% url 'explore_list' %}">Explore</a></li>
             <li><a href="{% url 'cat_create' %}">Add a Cat</a></li>
             <li><a href="{% url 'cats' %}">View All My Cats</a></li>
             <li><a href="{% url 'logout' %}">Log Out</a></li>
+            <li style="font-style: italic;">&nbsp;Hello, {{ user.username }}&nbsp;&nbsp;</li>
             {% else %}
             <li><a href="{% url 'login' %}">Log In</a></li>
             <li><a href="{% url 'signup' %}">Signup</a></li>
