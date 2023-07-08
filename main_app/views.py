@@ -84,8 +84,8 @@ def signup(request):
             # login new user automatically
             login(request, user)
             return redirect('cats')
-    else:
-        error_message = 'Invalid signup. Please Try again'
+        else:
+            error_message = 'Invalid signup. Please Try again'
     # bad POST or GET request, render signup
     form = UserCreationForm()
     return render(request, 'registration/signup.html', {

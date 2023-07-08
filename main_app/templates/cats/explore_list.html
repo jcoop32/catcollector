@@ -13,7 +13,11 @@
         {% else %}
           <p>Age: Kitten</p>
         {% endif %}
+        {% if cat.user.username == user.username %}
+        <p>Belongs to: <strong>You</strong></p>
+        {% else %}
         <p>Belongs to: {{ cat.user.username }}</p>
+        {% endif %}
       </div>
   </div>
 </div>
