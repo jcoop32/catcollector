@@ -1,3 +1,5 @@
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from .models import Cat
@@ -12,8 +14,10 @@ def about(request):
     return render(request, 'about.html') 
 
 def cats_list(request):
+    catLen = Cat.objects.filter(user=request.user).count()
     return render(request, 'cats/cats_list.html', {
-        'cats': Cat.objects.all().order_by('id')
+        'cats': Cat.objects.filter(user=request.user).order_by('id'),
+        'catLen': catLen,
     }) 
 
 def cat_details(request, cat_id):
@@ -26,7 +30,10 @@ def cat_details(request, cat_id):
 
 class CatCreate(CreateView):
     model = Cat
-    fields = '__all__'
+    fields = ['name', 'breed', 'description', 'age']
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 class CatUpdate(UpdateView):
     model = Cat
@@ -49,3 +56,23 @@ def add_feeding(request, cat_id):
         new_feeding.cat_id = cat_id
         new_feeding.save()
     return redirect('details', cat_id=cat_id)
+
+
+def signup(request):
+    error_message = ''
+    if (request.method == 'POST'):
+        form = UserCreationForm(request.POST)
+        if (form.is_valid()):
+            # saves user to the db
+            user = form.save()
+            # login new user automatically
+            login(request, user)
+            return redirect('cats')
+    else:
+        error_message = 'Invalid signup. Please Try again'
+    # bad POST or GET request, render signup
+    form = UserCreationForm()
+    return render(request, 'registration/signup.html', {
+        'form': form,
+        'error_message': error_message
+    })

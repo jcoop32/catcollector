@@ -1,19 +1,24 @@
 {% extends 'base.html' %} {% block content %}
 <h1>Cat List</h1>
-
-{% for cat in cats %}
-<div class="card">
-  <a href="{% url 'details' cat.id %}" class=""
-    ><div class="card-content">
-      <span class="card-title">{{ cat.name }}</span>
-      <p>Breed: {{ cat.breed }}</p>
-      <p>Description: {{ cat.description|linebreaks }}</p>
-      {% if cat.age > 0 %}
-      <p>Age: {{ cat.age }}</p>
-      {% else %}
-      <p>Age: Kitten</p>
-      {% endif %}
-    </div>
-  </a>
-</div>
-{% endfor %} {% endblock %}
+{% if catLen < 1 %}
+  <p>You have no cats.</p>
+  <a href="{% url 'cat_create' %}" class="btn">Add a Cat</a>
+{% else %}
+  {% for cat in cats %}
+  <div class="card">
+    <a href="{% url 'details' cat.id %}"
+      ><div class="card-content">
+        <span class="card-title">{{ cat.name }}</span>
+        <p>Breed: {{ cat.breed }}</p>
+        <p>Description: {{ cat.description|linebreaks }}</p>
+        {% if cat.age > 0 %}
+          <p>Age: {{ cat.age }}</p>
+        {% else %}
+          <p>Age: Kitten</p>
+        {% endif %}
+      </div>
+    </a>
+  </div>
+{% endfor %} 
+{% endif %}
+{% endblock %}
